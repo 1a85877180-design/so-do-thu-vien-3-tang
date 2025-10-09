@@ -3,19 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <title>Sơ đồ thư viện 3 tầng</title>
+
+<!-- Leaflet CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <style>
-  body { font-family: Arial, sans-serif; text-align: center; margin: 0; background: #f2f2f2; }
-  h1 { background: #004080; color: white; margin: 0; padding: 15px 0; }
-  .floor-buttons { margin: 20px 0; }
-  button {
-    background-color: #0078d7; color: white; border: none; padding: 10px 20px;
-    margin: 0 5px; border-radius: 5px; cursor: pointer; font-size: 16px;
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    background: #f2f2f2;
   }
-  button:hover { background-color: #005a9e; }
-  #map-container {
-    margin: 0 auto; width: 95%; height: 80vh;
-    border: 2px solid #ccc; background: white;
-    overflow: auto;
+  h1 {
+    background: #004080;
+    color: white;
+    margin: 0;
+    padding: 15px 0;
+  }
+  .floor-buttons {
+    margin: 20px 0;
+  }
+  button {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #005a9e;
+  }
+
+  /* Hiệu ứng fade in/out */
+  .floor-container {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    transition: opacity 0.6s ease, visibility 0.6s ease, height 0.6s ease;
+  }
+  .floor-container.active {
+    opacity: 1;
+    visibility: visible;
+    height: 85vh;
+  }
+
+  iframe {
+    width: 95%;
+    height: 100%;
+    border: none;
+  }
+
+  #map {
+    width: 95%;
+    height: 85vh;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
   }
 </style>
 </head>
@@ -24,30 +72,48 @@
 <h1>Sơ đồ thư viện 3 tầng</h1>
 
 <div class="floor-buttons">
-  <button onclick="showFloor('tang1.html')">Tầng 1</button>
-  <button onclick="showFloor('tang2.html')">Tầng 2</button>
-  <button onclick="showFloor('tang3.html')">Tầng 3</button>
+  <button onclick="showFloor(1)">Tầng 1</button>
+  <button onclick="showFloor(2)">Tầng 2</button>
+  <button onclick="showFloor(3)">Tầng 3</button>
 </div>
 
-<div id="map-container">
-  <p>Đang tải sơ đồ...</p>
+<!-- Tầng 1: Bản đồ Leaflet -->
+<div id="floor1" class="floor-container active">
+  <div id="map"></div>
+</div>
+
+<!-- Tầng 2 -->
+<div id="floor2" class="floor-container">
+  <iframe id="iframe2" src="tang2.html" style="width:95%;height:100%;border:none;"></iframe>
+</div>
+
+<!-- Tầng 3 -->
+<div id="floor3" class="floor-container">
+  <iframe id="iframe3" src="tang3.html" style="width:95%;height:100%;border:none;"></iframe>
 </div>
 
 <script>
-async function showFloor(file) {
-  const container = document.getElementById('map-container');
-  container.innerHTML = '<p>Đang tải sơ đồ...</p>';
-  try {
-    const response = await fetch(file);
-    if (!response.ok) throw new Error('Không tải được file: ' + file);
-    const html = await response.text();
-    container.innerHTML = html;
-  } catch (err) {
-    container.innerHTML = `<p style="color:red;">Lỗi tải ${file}: ${err.message}</p>`;
-  }
+// Hiệu ứng chuyển tầng
+function showFloor(n) {
+  document.querySelectorAll('.floor-container').forEach(div => div.classList.remove('active'));
+  document.getElementById('floor' + n).classList.add('active');
 }
-// Hiển thị mặc định tầng 1
-showFloor('tang1.html');
+
+// Khởi tạo bản đồ Leaflet
+const map = L.map('map').setView([20.85, 106.68], 17); // bạn có thể chỉnh toạ độ cho phù hợp
+
+// Thêm lớp bản đồ nền (OpenStreetMap)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Ví dụ các giá sách (bạn có thể thêm marker của bạn ở đây)
+const shelves = [
+  { name: "Khu A", coords: [20.8502, 106.6810] },
+  { name: "Khu B", coords: [20.8505, 106.6813] },
+  { name: "Khu C", coords: [20.8508, 106.6816] }
+];
+shelves.forEach(s => L.marker(s.coords).addTo(map).bindPopup(s.name));
 </script>
 
 </body>
