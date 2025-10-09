@@ -12,11 +12,11 @@
     margin: 0 5px; border-radius: 5px; cursor: pointer; font-size: 16px;
   }
   button:hover { background-color: #005a9e; }
-  .floor-container {
-    display: none; margin: 0 auto; width: 95%; height: 80vh;
+  #map-container {
+    margin: 0 auto; width: 95%; height: 80vh;
     border: 2px solid #ccc; background: white;
+    overflow: auto;
   }
-  iframe { width: 100%; height: 100%; border: none; }
 </style>
 </head>
 <body>
@@ -24,27 +24,30 @@
 <h1>Sơ đồ thư viện 3 tầng</h1>
 
 <div class="floor-buttons">
-  <button onclick="showFloor(1)">Tầng 1</button>
-  <button onclick="showFloor(2)">Tầng 2</button>
-  <button onclick="showFloor(3)">Tầng 3</button>
+  <button onclick="showFloor('tang1.html')">Tầng 1</button>
+  <button onclick="showFloor('tang2.html')">Tầng 2</button>
+  <button onclick="showFloor('tang3.html')">Tầng 3</button>
 </div>
 
-<div id="floor1" class="floor-container">
-  <iframe src="tang1.html"></iframe>
-</div>
-<div id="floor2" class="floor-container">
-  <iframe src="tang2.html"></iframe>
-</div>
-<div id="floor3" class="floor-container">
-  <iframe src="tang3.html"></iframe>
+<div id="map-container">
+  <p>Đang tải sơ đồ...</p>
 </div>
 
 <script>
-function showFloor(n) {
-  document.querySelectorAll('.floor-container').forEach(div => div.style.display = 'none');
-  document.getElementById('floor' + n).style.display = 'block';
+async function showFloor(file) {
+  const container = document.getElementById('map-container');
+  container.innerHTML = '<p>Đang tải sơ đồ...</p>';
+  try {
+    const response = await fetch(file);
+    if (!response.ok) throw new Error('Không tải được file: ' + file);
+    const html = await response.text();
+    container.innerHTML = html;
+  } catch (err) {
+    container.innerHTML = `<p style="color:red;">Lỗi tải ${file}: ${err.message}</p>`;
+  }
 }
-showFloor(1);
+// Hiển thị mặc định tầng 1
+showFloor('tang1.html');
 </script>
 
 </body>
