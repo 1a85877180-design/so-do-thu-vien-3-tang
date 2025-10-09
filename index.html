@@ -100,20 +100,135 @@ function showFloor(n) {
 }
 
 // Khởi tạo bản đồ Leaflet
-const map = L.map('map').setView([20.85, 106.68], 17); // bạn có thể chỉnh toạ độ cho phù hợp
 
-// Thêm lớp bản đồ nền (OpenStreetMap)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+  var w = 1099, h = 768;
+  var bounds = [[0,0], [h,w]];
 
-// Ví dụ các giá sách (bạn có thể thêm marker của bạn ở đây)
-const shelves = [
-  { name: "Khu A", coords: [20.8502, 106.6810] },
-  { name: "Khu B", coords: [20.8505, 106.6813] },
-  { name: "Khu C", coords: [20.8508, 106.6816] }
-];
-shelves.forEach(s => L.marker(s.coords).addTo(map).bindPopup(s.name));
+  var map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: -1
+  });
+
+  L.imageOverlay('thu_vien.jpg', bounds).addTo(map);
+  map.fitBounds(bounds);
+
+  var areas = [
+    {name: "Cửa vào", type: "rect", coords: [[20, 400],[50, 700]], color: "black"},
+    {name: "Quầy lễ tân", type: "rect", coords: [[160, 450],[100, 650]], color: "red"},
+    {name: "Phòng thủ thư", type: "rect", coords: [[900, 400],[760, 700]], color: "brown"},
+    {name: "Báo", type: "circle", coords: [250, 300], radius: 60, color: "green"},
+	{name: "Cầu thang bộ", type: "circle", coords: [370, 550], radius: 130, color: "gray"},
+    {name: "Tạp chí", type: "circle", coords: [250, 800], radius: 60, color: "orange"},
+    // Xóa "Giáo trình" để thay bằng cầu thang bộ
+    {name: "Phòng đọc nhóm", type: "rect", coords: [[50, 20],[700, 70]], color: "gray"},
+    {name: "Xã hội học", type: "rect", coords: [[70, 100],[110, 200]], color: "blue"},
+    {name: "Các tác phẩm về Hồ Chí Minh", type: "rect", coords: [[120, 100],[160, 200]], color: "blue"},
+    {name: "Tư tưởng HCM<br>Kinh tế chính trị", type: "rect", coords: [[170, 100],[210, 200]], color: "blue"},
+    {name: "Kinh tế phát triển<br>Khoa học công nghệ<br>Kinh tế thế giới<br>Kinh tế quốc tế", type: "rect", coords: [[220, 100],[260, 200]], color: "blue"},
+    {name: "Kinh tế nông nghiệp", type: "rect", coords: [[270, 100],[310, 200]], color: "blue"},
+    {name: "Lịch sử<br>Khoa học chung<br>Kinh tế tri thức<br>Xây dựng & đô thị", type: "rect", coords: [[320, 100],[360, 200]], color: "blue"},
+    {name: "Lịch sử Đảng", type: "rect", coords: [[370, 100],[410, 200]], color: "blue"},
+    {name: "", type: "rect", coords: [[420, 100],[460, 200]], color: "blue"},
+    {name: "Marketing", type: "rect", coords: [[500, 200],[540, 265]], color: "purple"},
+    {name: "Marketing", type: "rect", coords: [[550, 200],[590, 265]], color: "purple"},
+    {name: "Marketing", type: "rect", coords: [[600, 200],[640, 265]], color: "purple"},
+    {name: "Marketing", type: "rect", coords: [[650, 200],[690, 265]], color: "purple"},
+    {name: "Mặt ngoài", type: "rect", coords: [[700, 260],[740, 320]], color: "purple"},
+    {name: "Logic", type: "rect", coords: [[500, 400],[540, 470]], color: "purple"},
+    {name: "Địa lý", type: "rect", coords: [[550, 400],[590, 470]], color: "purple"},
+    {name: "Quân sự", type: "rect", coords: [[600, 400],[640, 470]], color: "purple"},
+    {name: "Kinh tế bảo hiểm<br>Kinh tế đầu tư", type: "rect", coords: [[650, 400],[690, 470]], color: "purple"},
+    {name: "Mặt trong", type: "rect", coords: [[700, 350],[740, 410]], color: "purple"},
+    {name: "Thuế", type: "rect", coords: [[500, 650],[540, 720]], color: "purple"},
+    {name: "Thuế", type: "rect", coords: [[550, 650],[590, 720]], color: "purple"},
+    {name: "Thuế", type: "rect", coords: [[600, 650],[640, 720]], color: "purple"},
+    {name: "Thuế", type: "rect", coords: [[650, 650],[690, 720]], color: "purple"},
+	  {name: "Mặt trong", type: "rect", coords: [[740, 700],[700, 780]], color: "purple"},
+    {name: "Thống kê kinh tế", type: "rect", coords: [[150, 950],[190, 1050]], color: "blue"},
+	{name: "", type: "rect", coords: [[70, 950],[110, 1050]], color: "blue"},
+	{name: "Thống kê kinh tế", type: "rect", coords: [[150, 950],[110, 1050]], color: "blue"},
+    {name: "Thống kê kinh tế<br>Giá cả<br>Khoa học dự báo<br>Tin học", type: "rect", coords: [[200, 950],[240, 1050]], color: "blue"},
+    {name: "Các nước trên thế giới<br>Các tác phẩm Lenin", type: "rect", coords: [[250, 950],[290, 1050]], color: "blue"},
+    {name: "Mác & Ăngghen", type: "rect", coords: [[300, 950],[340, 1050]], color: "blue"},
+    {name: "Kinh tế công nghiệp<br>Tôn giáo<br>Các loại khác<br>Đoàn thanh niên<br>Kinh tế môi trường", type: "rect", coords: [[350, 950],[390, 1050]], color: "blue"},
+    {name: "Những vấn đề khác<br>Các loại khác", type: "rect", coords: [[400, 950],[440, 1050]], color: "blue"},
+    {name: "Luật", type: "rect", coords: [[500, 900],[540, 970]], color: "purple"},
+    {name: "Luật", type: "rect", coords: [[550, 900],[590, 970]], color: "purple"},
+    {name: "Luật", type: "rect", coords: [[600, 900],[640, 970]], color: "purple"},
+	  {name: "Mặt ngoài", type: "rect", coords: [[740, 840],[700, 920]], color: "purple"},
+    {name: "Luật", type: "rect", coords: [[650, 900],[690, 970]], color: "purple"},
+    {name: "Kho sách<br>ngoại văn", type: "rect", coords: [[50, 1070],[400, 1100]], color: "gray"},
+	{name: "Kho sách ngoại văn", type: "rect", coords: [[800, 1070],[700, 1100]], color: "gray"},
+    {name: "Phòng hội thảo", type: "rect", coords: [[400, 1070],[700, 1100]], color: "gray"}
+  ];
+
+  // Vẽ các khu vực
+  areas.forEach(area => {
+    if(area.type === "rect"){
+      L.rectangle(area.coords, {color: area.color, weight: 1})
+        .addTo(map)
+        .bindTooltip(area.name, {permanent: true, direction: "center"})
+        .openTooltip();
+    } else if(area.type === "circle"){
+      L.circle(area.coords, {radius: area.radius, color: area.color})
+        .addTo(map)
+        .bindTooltip(area.name, {permanent: true, direction: "center"})
+        .openTooltip();
+    }
+  });
+
+  // ===== Hàm tạo cầu thang bộ zích zắc =====
+  function createStairs(start, steps, stepWidth, stepHeight, direction="right") {
+    let [y, x] = start;
+    let dir = direction === "right" ? 1 : -1;
+
+    for (let i = 0; i < steps; i++) {
+      // Bậc ngang
+      let rect1 = [[y, x], [y + stepHeight, x + dir * stepWidth]];
+      L.rectangle(rect1, {color:"blue", weight:1, fillColor:"lightblue", fillOpacity:0.7})
+        .addTo(map);
+      y += stepHeight;
+      x += dir * stepWidth;
+
+      // Bậc dọc
+      let rect2 = [[y, x], [y + stepHeight, x + stepWidth/2]];
+      L.rectangle(rect2, {color:"blue", weight:1, fillColor:"lightblue", fillOpacity:0.7})
+        .addTo(map);
+      y += stepHeight;
+    }
+
+    // Thêm 1 tooltip chung cho toàn bộ cầu thang
+    L.marker(start, {opacity:0})
+      .addTo(map)
+      .bindTooltip("", {permanent:true, direction:"center"});
+  }
+
+  // Gọi cầu thang bộ thay cho "Giáo trình"
+  createStairs([300, 460], 4, 40, 20, "right");
+
+  // ===== Hàm tạo block arc =====
+  function createArc(center, radius, startAngle, endAngle, steps) {
+    var points = [center];
+    for (var i=0; i<=steps; i++) {
+      var angle = startAngle + (endAngle-startAngle)*i/steps;
+      var x = center[1] + radius * Math.cos(angle * Math.PI/180);
+      var y = center[0] + radius * Math.sin(angle * Math.PI/180);
+      points.push([y,x]);
+    }
+    return points;
+  }
+
+  // ===== Thêm 2 block arc =====
+  var arc2 = createArc([580, 330], 65, 0, 180, 500);
+  L.polygon(arc2, {color:"brown", fillColor:"yellow", fillOpacity:0.5})
+    .addTo(map)
+    .bindTooltip("Giá sách hình vòng cung",{permanent:true,direction:"center"});
+
+  var arc3 = createArc([580, 810], 65, 0, 180, 500);
+  L.polygon(arc3, {color:"brown", fillColor:"yellow", fillOpacity:0.5})
+    .addTo(map)
+    .bindTooltip("Giá sách hình vòng cung",{permanent:true,direction:"center"});
+
 </script>
 
 </body>
