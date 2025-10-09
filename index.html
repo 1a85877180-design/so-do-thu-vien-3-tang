@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Sơ đồ thư viện 3 tầng</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; margin: 0; background: #f2f2f2; }
+  h1 { background: #004080; color: white; margin: 0; padding: 15px 0; }
+  .floor-buttons { margin: 20px 0; }
+  button {
+    background-color: #0078d7; color: white; border: none; padding: 10px 20px;
+    margin: 0 5px; border-radius: 5px; cursor: pointer; font-size: 16px;
+  }
+  button:hover { background-color: #005a9e; }
+  .floor-container {
+    display: none; margin: 0 auto; width: 95%; height: 80vh;
+    border: 2px solid #ccc; background: white;
+  }
+  iframe { width: 100%; height: 100%; border: none; }
+</style>
+</head>
+<body>
+
+<h1>Sơ đồ thư viện 3 tầng</h1>
+
+<div class="floor-buttons">
+  <button onclick="showFloor(1)">Tầng 1</button>
+  <button onclick="showFloor(2)">Tầng 2</button>
+  <button onclick="showFloor(3)">Tầng 3</button>
+</div>
+
+<div id="floor1" class="floor-container">
+  <iframe src="tang1.html"></iframe>
+</div>
+<div id="floor2" class="floor-container">
+  <iframe src="tang2.html"></iframe>
+</div>
+<div id="floor3" class="floor-container">
+  <iframe src="tang3.html"></iframe>
+</div>
+
+<script>
+function showFloor(n) {
+  document.querySelectorAll('.floor-container').forEach(div => div.style.display = 'none');
+  document.getElementById('floor' + n).style.display = 'block';
+}
+showFloor(1);
+</script>
+
+</body>
+</html>
