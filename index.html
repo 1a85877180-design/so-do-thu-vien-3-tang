@@ -114,16 +114,18 @@ function showFloor(n) {
   document.getElementById('floor' + n).classList.add('active');
 }
 
-// Xử lý tự động mở khóa tương tác/zoom khi di chuột vào iframe Tầng 2 và Tầng 3
+// Xử lý tự động mở khóa và FOCUS vào iframe Tầng 2 và Tầng 3 khi rê chuột vào
 document.querySelectorAll('.iframe-wrapper').forEach(wrapper => {
   const iframe = wrapper.querySelector('iframe');
   
   wrapper.addEventListener('mouseenter', function() {
-    iframe.style.pointerEvents = 'auto'; // Rê chuột vào là mở khóa ngay lập tức
+    iframe.style.pointerEvents = 'auto'; // Mở khóa tương tác chuột
+    iframe.focus(); // Ép trình duyệt focus vào iframe ngay khi rê chuột (giúp nhận lăn chuột luôn mà không cần click)
   });
   
   wrapper.addEventListener('mouseleave', function() {
-    iframe.style.pointerEvents = 'none'; // Rê chuột ra ngoài là khóa lại để cuộn trang web bình thường
+    iframe.style.pointerEvents = 'none'; // Khóa lại để cuộn trang web bình thường khi rê chuột ra ngoài
+    iframe.blur(); // Bỏ focus
   });
 });
 
