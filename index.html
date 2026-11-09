@@ -62,40 +62,19 @@
   }
 
   /* ===== CSS CHO TRƯỜNG HỢP 2 (IFRAME TẦNG 2 & 3) ===== */
-.iframe-wrapper {
-  position: relative;
-  width: 95%;
-  height: 100%;
-  margin: 0 auto;
-}
+  .iframe-wrapper {
+    position: relative;
+    width: 95%;
+    height: 100%;
+    margin: 0 auto;
+  }
 
-.iframe-wrapper iframe {
-  pointer-events: none; /* Mặc định khóa để cuộn trang mượt */
-  width: 100%;
-  height: 100%;
-  border: none;
-  transition: pointer-events 0.2s;
-}
-  .iframe-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .iframe-wrapper iframe {
+    pointer-events: none; /* Mặc định khóa để cuộn trang mượt */
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.04);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #004080;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 2px dashed #0078d7;
-    border-radius: 8px;
-    transition: background 0.3s;
-  }
-  .iframe-wrapper.active .iframe-overlay {
-    display: none; /* Ẩn thông báo đi khi đã kích hoạt zoom bản đồ */
+    border: none;
+    transition: pointer-events 0.2s;
   }
 </style>
 </head>
@@ -118,7 +97,6 @@
 <div id="floor2" class="floor-container">
   <div class="iframe-wrapper">
     <iframe id="iframe2" src="tang2.html"></iframe>
-    <div class="iframe-overlay">Nhấn vào đây để tương tác và zoom bản đồ Tầng 2</div>
   </div>
 </div>
 
@@ -126,7 +104,6 @@
 <div id="floor3" class="floor-container">
   <div class="iframe-wrapper">
     <iframe id="iframe3" src="tang3.html"></iframe>
-    <div class="iframe-overlay">Nhấn vào đây để tương tác và zoom bản đồ Tầng 3</div>
   </div>
 </div>
 
@@ -137,13 +114,16 @@ function showFloor(n) {
   document.getElementById('floor' + n).classList.add('active');
 }
 
-// Xử lý bật/tắt pointer-events cho các iframe Tầng 2 và Tầng 3
+// Xử lý tự động mở khóa tương tác/zoom khi di chuột vào iframe Tầng 2 và Tầng 3
 document.querySelectorAll('.iframe-wrapper').forEach(wrapper => {
-  wrapper.addEventListener('click', function() {
-    this.classList.add('active');
+  const iframe = wrapper.querySelector('iframe');
+  
+  wrapper.addEventListener('mouseenter', function() {
+    iframe.style.pointerEvents = 'auto'; // Rê chuột vào là mở khóa ngay lập tức
   });
+  
   wrapper.addEventListener('mouseleave', function() {
-    this.classList.remove('active'); // Khóa lại khi di chuột ra ngoài để trang web cuộn bình thường
+    iframe.style.pointerEvents = 'none'; // Rê chuột ra ngoài là khóa lại để cuộn trang web bình thường
   });
 });
 
